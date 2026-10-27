@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CORS-test</title>
+  </head>
+  <body>
+    <h1>Hämta kunder</h1>
+    <button id="load">Hämta kunder</button>
+    <ul id="customers"></ul>
+
+    <script>
+      document.querySelector("#load").addEventListener("click", async () => {
+        const list = document.querySelector("#customers");
+        list.innerHTML = "";
+        try {
+          const response = await fetch("http://localhost:3000/api/customers");
+          if (!response.ok) throw new Error("API-fel: " + response.status);
+          const customers = await response.json();
+          customers.forEach((customer) => {
+            const li = document.createElement("li");
+            li.textContent = customer.name;
+            list.appendChild(li);
+          });
+        } catch (error) {
+          list.textContent = "Kunde inte hämta kunder. Kontrollera konsolen.";
+          console.error(error);
+        }
+      });
+    </script>
+  </body>
+</html>
